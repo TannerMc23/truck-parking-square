@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Truck Parking — Secure Overnight Lot</title>
+  <title>Vantyx Semi-Truck Parking</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -158,6 +158,59 @@
       color: var(--asphalt);
     }
     .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* ── Disclaimer box ── */
+    .disclaimer-box {
+      background: #fff8ec;
+      border: 1.5px solid var(--amber);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+    .disclaimer-box .disclaimer-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber-dk);
+      margin-bottom: 6px;
+    }
+    .disclaimer-box p {
+      font-size: 12px;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    /* ── Checkbox ── */
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 2px;
+      accent-color: var(--amber);
+      cursor: pointer;
+      background: var(--mist);
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+    }
+    .checkbox-row input[type="checkbox"].error {
+      outline: 2px solid var(--danger);
+    }
+    .checkbox-row label {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.5;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
     .error-msg {
       color: var(--danger);
       font-size: 13px;
@@ -200,14 +253,18 @@
   </style>
 </head>
 <body>
+
 <header>
   <div class="eyebrow">Secure Overnight &amp; Extended Parking</div>
-  <h1>Warehouse Truck Lot</h1>
+  <h1>Vantyx Semi-Truck Parking</h1>
   <p class="sub">Fill out the form below and pay securely to reserve your spot.</p>
 </header>
+
 <main>
   <div class="card">
     <div class="card-body">
+
+      <!-- Driver Info -->
       <div class="section-label">Driver Information</div>
       <div class="field-group">
         <div class="row-2">
@@ -235,6 +292,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Stay Duration -->
       <div class="section-label">Stay Duration</div>
       <div class="stay-options">
         <div class="stay-btn active" data-type="night">
@@ -250,6 +309,7 @@
           <div class="desc">1 Month</div>
         </div>
       </div>
+
       <div id="night-picker">
         <label>Number of Nights <span class="req">*</span></label>
         <select id="nights">
@@ -261,23 +321,42 @@
           <option value="6">6 Nights — $120</option>
         </select>
       </div>
+
       <div class="price-preview">
         <span class="price-label">Total Due</span>
         <span class="price-amount" id="price-display">$20.00</span>
       </div>
+
       <hr class="divider" />
+
+      <!-- Disclaimer -->
+      <div class="disclaimer-box">
+        <div class="disclaimer-title">Parking Disclaimer</div>
+        <p>Vantyx is not responsible for any theft, vandalism, or damages to vehicles or cargo while parked on this property. All semi-truck drivers park at their own risk. By proceeding with payment you acknowledge and agree to these terms.</p>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="disclaimer-check" />
+        <label for="disclaimer-check">I understand that Vantyx is not responsible for theft, vandalism, or any damages. I agree to park at my own risk.</label>
+      </div>
+
       <div class="error-msg" id="error-msg">Please fill in all required fields.</div>
+
       <button type="submit" id="pay-btn">Proceed to Secure Payment →</button>
+
       <div class="secure-note">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
         </svg>
         Payments processed securely by Square. We never store card information.
       </div>
+
     </div>
   </div>
 </main>
-<footer>Warehouse Truck Lot &mdash; Secure Overnight Parking</footer>
+
+<footer>Vantyx Semi-Truck Parking &mdash; Secure Overnight Parking</footer>
+
 <script>
   const stayBtns = document.querySelectorAll('.stay-btn');
   const nightPicker = document.getElementById('night-picker');
@@ -285,6 +364,7 @@
   const priceDisplay = document.getElementById('price-display');
   const payBtn = document.getElementById('pay-btn');
   const errorMsg = document.getElementById('error-msg');
+  const disclaimerCheck = document.getElementById('disclaimer-check');
 
   let stayType = 'night';
 
@@ -313,22 +393,33 @@
 
   payBtn.addEventListener('click', async () => {
     errorMsg.style.display = 'none';
+
     const name    = document.getElementById('name').value.trim();
     const email   = document.getElementById('email').value.trim();
     const phone   = document.getElementById('phone').value.trim();
     const plate   = document.getElementById('plate').value.trim();
     const company = document.getElementById('company').value.trim();
     const nights  = nightsSelect.value;
+    const agreed  = disclaimerCheck.checked;
 
     ['name','email','phone','plate'].forEach(id => {
       document.getElementById(id).classList.remove('error');
     });
+    disclaimerCheck.classList.remove('error');
 
     let valid = true;
     if (!name)  { document.getElementById('name').classList.add('error');  valid = false; }
     if (!email) { document.getElementById('email').classList.add('error'); valid = false; }
     if (!phone) { document.getElementById('phone').classList.add('error'); valid = false; }
     if (!plate) { document.getElementById('plate').classList.add('error'); valid = false; }
+
+    if (!agreed) {
+      disclaimerCheck.classList.add('error');
+      valid = false;
+      errorMsg.textContent = 'You must agree to the parking disclaimer before proceeding.';
+      errorMsg.style.display = 'block';
+      return;
+    }
 
     if (!valid) {
       errorMsg.textContent = 'Please fill in all required fields.';
