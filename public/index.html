@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Truck Parking — Secure Overnight Lot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --asphalt:   #1a1d1f;
+      --amber:     #F5A623;
+      --amber-dk:  #d4891a;
+      --white:     #ffffff;
+      --mist:      #f2f4f6;
+      --mid:       #6b7280;
+      --border:    #d1d5db;
+      --danger:    #dc2626;
+    }
+    body {
+      background: var(--asphalt);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--asphalt);
+      padding: 28px 24px 20px;
+      text-align: center;
+      border-bottom: 3px solid var(--amber);
+    }
+    header .eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    header h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(28px, 6vw, 44px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    header p.sub {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--mid);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px 48px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+    }
+    .card-body { padding: 32px 28px; }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .field-group { margin-bottom: 24px; }
+    .field { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+    label .req { color: var(--danger); margin-left: 2px; }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--asphalt);
+      background: var(--mist);
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--amber);
+      background: #fff;
+    }
+    input.error, select.error { border-color: var(--danger); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stay-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stay-btn {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 6px;
+      cursor: pointer;
+      text-align: center;
+      background: var(--mist);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .stay-btn:hover { border-color: var(--amber); }
+    .stay-btn.active {
+      border-color: var(--amber);
+      background: #fff8ec;
+    }
+    .stay-btn .amount {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--asphalt);
+      line-height: 1;
+    }
+    .stay-btn .desc {
+      font-size: 11px;
+      color: var(--mid);
+      margin-top: 3px;
+    }
+    #night-picker { margin-bottom: 14px; }
+    .price-preview {
+      background: #fff8ec;
+      border: 1.5px solid var(--amber);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .price-preview .price-label { font-size: 13px; color: var(--mid); }
+    .price-preview .price-amount {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--asphalt);
+    }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .error-msg {
+      color: var(--danger);
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background: var(--amber);
+      color: var(--asphalt);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    button[type="submit"]:hover { background: var(--amber-dk); }
+    button[type="submit"]:active { transform: scale(0.99); }
+    button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; }
+    .secure-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--mid);
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: #4b5563;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Secure Overnight &amp; Extended Parking</div>
+  <h1>Warehouse Truck Lot</h1>
+  <p class="sub">Fill out the form below and pay securely to reserve your spot.</p>
+</header>
+<main>
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">Driver Information</div>
+      <div class="field-group">
+        <div class="row-2">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="name" placeholder="John Smith" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label>Phone <span class="req">*</span></label>
+            <input type="tel" id="phone" placeholder="(555) 000-0000" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>License Plate / Truck ID <span class="req">*</span></label>
+            <input type="text" id="plate" placeholder="ABC-1234" />
+          </div>
+          <div class="field">
+            <label>Company Name</label>
+            <input type="text" id="company" placeholder="Optional" />
+          </div>
+        </div>
+      </div>
+      <div class="section-label">Stay Duration</div>
+      <div class="stay-options">
+        <div class="stay-btn active" data-type="night">
+          <div class="amount">$20</div>
+          <div class="desc">Per Night</div>
+        </div>
+        <div class="stay-btn" data-type="week">
+          <div class="amount">$95</div>
+          <div class="desc">1 Week</div>
+        </div>
+        <div class="stay-btn" data-type="month">
+          <div class="amount">$275</div>
+          <div class="desc">1 Month</div>
+        </div>
+      </div>
+      <div id="night-picker">
+        <label>Number of Nights <span class="req">*</span></label>
+        <select id="nights">
+          <option value="1">1 Night — $20</option>
+          <option value="2">2 Nights — $40</option>
+          <option value="3">3 Nights — $60</option>
+          <option value="4">4 Nights — $80</option>
+          <option value="5">5 Nights — $100</option>
+          <option value="6">6 Nights — $120</option>
+        </select>
+      </div>
+      <div class="price-preview">
+        <span class="price-label">Total Due</span>
+        <span class="price-amount" id="price-display">$20.00</span>
+      </div>
+      <hr class="divider" />
+      <div class="error-msg" id="error-msg">Please fill in all required fields.</div>
+      <button type="submit" id="pay-btn">Proceed to Secure Payment →</button>
+      <div class="secure-note">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Payments processed securely by Square. We never store card information.
+      </div>
+    </div>
+  </div>
+</main>
+<footer>Warehouse Truck Lot &mdash; Secure Overnight Parking</footer>
+<script>
+  const stayBtns = document.querySelectorAll('.stay-btn');
+  const nightPicker = document.getElementById('night-picker');
+  const nightsSelect = document.getElementById('nights');
+  const priceDisplay = document.getElementById('price-display');
+  const payBtn = document.getElementById('pay-btn');
+  const errorMsg = document.getElementById('error-msg');
+
+  let stayType = 'night';
+
+  function updatePrice() {
+    if (stayType === 'night') {
+      const n = parseInt(nightsSelect.value);
+      priceDisplay.textContent = `$${(n * 20).toFixed(2)}`;
+    } else if (stayType === 'week') {
+      priceDisplay.textContent = '$95.00';
+    } else {
+      priceDisplay.textContent = '$275.00';
+    }
+  }
+
+  stayBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      stayBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      stayType = btn.dataset.type;
+      nightPicker.style.display = stayType === 'night' ? 'block' : 'none';
+      updatePrice();
+    });
+  });
+
+  nightsSelect.addEventListener('change', updatePrice);
+
+  payBtn.addEventListener('click', async () => {
+    errorMsg.style.display = 'none';
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const phone   = document.getElementById('phone').value.trim();
+    const plate   = document.getElementById('plate').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const nights  = nightsSelect.value;
+
+    ['name','email','phone','plate'].forEach(id => {
+      document.getElementById(id).classList.remove('error');
+    });
+
+    let valid = true;
+    if (!name)  { document.getElementById('name').classList.add('error');  valid = false; }
+    if (!email) { document.getElementById('email').classList.add('error'); valid = false; }
+    if (!phone) { document.getElementById('phone').classList.add('error'); valid = false; }
+    if (!plate) { document.getElementById('plate').classList.add('error'); valid = false; }
+
+    if (!valid) {
+      errorMsg.textContent = 'Please fill in all required fields.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    payBtn.disabled = true;
+    payBtn.textContent = 'Redirecting to payment…';
+
+    try {
+      const res = await fetch('/create-payment-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, company, plate, stayType, nights }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      errorMsg.textContent = 'Something went wrong. Please try again.';
+      errorMsg.style.display = 'block';
+      payBtn.disabled = false;
+      payBtn.textContent = 'Proceed to Secure Payment →';
+    }
+  });
+</script>
+</body>
+</html>

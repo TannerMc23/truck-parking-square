@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Confirmed — Truck Parking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --asphalt: #1a1d1f;
+      --amber:   #F5A623;
+      --white:   #ffffff;
+      --mid:     #6b7280;
+    }
+    body {
+      background: var(--asphalt);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      max-width: 460px;
+      width: 100%;
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+    }
+    .check-circle {
+      width: 64px;
+      height: 64px;
+      background: #dcfce7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--asphalt);
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 15px;
+      color: var(--mid);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .divider { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+    .info-box {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 14px;
+      color: #374151;
+      text-align: left;
+      line-height: 1.8;
+    }
+    a.back-btn {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 12px 28px;
+      background: var(--amber);
+      color: var(--asphalt);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    a.back-btn:hover { background: #d4891a; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check-circle">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h1>You're All Set!</h1>
+    <p>Your parking payment was received. A receipt has been sent to your email by Square.</p>
+    <p>Welcome to the lot — please follow any posted signs for designated truck parking areas.</p>
+    <hr class="divider" />
+    <div class="info-box">
+      <strong>Need help?</strong><br/>
+      If you have any questions about your stay, contact the lot manager directly.
+    </div>
+    <a class="back-btn" href="/">Back to Booking Form</a>
+  </div>
+</body>
+</html>
